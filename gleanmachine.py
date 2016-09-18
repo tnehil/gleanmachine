@@ -92,8 +92,9 @@ def parse_article(url):
 @app.route('/build')
 def build_glean():
 
-    #todo -- grab the URLs from redis
-    url_list = urls
+    redis_db = redis.from_url(os.environ['REDIS_URL'])
+
+    url_list = get_current_gleanings(redis_db)
 
     gleanings = []
 
@@ -101,6 +102,7 @@ def build_glean():
         gleanings.append(parse_article(url))
 
     #todo: clear redis cache of urls
+    redis_db.delete('gleanings')
 
     return render_template('glean.html', gleanings=gleanings)
 
