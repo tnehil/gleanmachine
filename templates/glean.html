@@ -1,0 +1,10 @@
+{% for article in gleanings %}
+
+<p><strong>A witty setup TK.</strong> <a href="{{article.url}}" target="_blank">
+{{article.publication}}’s {{article.authors}} report{% if article.authors_singular %}s{% endif %}:</a>
+“{{article.summary}}”</p>
+
+<p><strong>Witty setup TK:</strong> “<a href="{{article.url}}" target="_blank">{{article.title}}</a>”
+[{{article.publication}}]
+
+{% endfor %}
