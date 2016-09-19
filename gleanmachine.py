@@ -122,4 +122,4 @@ def clear_gleanings():
     return render_template('clearform.html', message=message)
 
 if __name__ == '__main__':
-    app.run(debug=True, use_reloader=True)
+    app.run()
