@@ -58,30 +58,44 @@ def parse_article(url):
             publication = publications[pub]
 
     article.download()
-    article.parse()
 
-    title = article.title
+    parsed = False
 
-    extracted_authors = article.authors
-    authors_singular = False
-    if len(extracted_authors) == 2:
-        authors = " and ".join(extracted_authors)
-    if len(extracted_authors) > 2:
-        authors = ", ".join(extracted_authors[i] for i in range(len(extracted_authors)-1))
-        authors += " and " + extracted_authors[-1]
-    else:
-        authors = extracted_authors[0]
-        authors_singular = True
+    try:
+        article.parse()
 
-    article_fulltext = article.text
-    article_paragraphs = article_fulltext.split("\n\n")
-    if len(article_paragraphs) > 4:
-        summary = " … ".join(article_paragraphs[0:4])
-    else:
-        summary = article_fulltext.replace("\n\n"," … ")
+        parsed = True
+
+        title = article.title
+
+        extracted_authors = article.authors
+        authors_singular = False
+        authors = 'AUTHORS TK'
+        if len(extracted_authors) == 2:
+            authors = " and ".join(extracted_authors)
+        if len(extracted_authors) > 2:
+            authors = ", ".join(extracted_authors[i] for i in range(len(extracted_authors)-1))
+            authors += " and " + extracted_authors[-1]
+        if len(extracted_authors) == 1:
+            authors = extracted_authors[0]
+            authors_singular = True
+
+        article_fulltext = article.text
+        article_paragraphs = article_fulltext.split("\n\n")
+        if len(article_paragraphs) > 4:
+            summary = " … ".join(article_paragraphs[0:4])
+        else:
+            summary = article_fulltext.replace("\n\n"," … ")
+    except:
+        publication = None
+        title = None
+        authors = None
+        authors_singular = False
+        summary = None
 
     return {
                 "url": url,
+                "parsed": parsed,
                 "publication": publication,
                 "title": title,
                 "authors": authors,

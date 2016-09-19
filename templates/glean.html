@@ -1,10 +1,18 @@
 {% for article in gleanings %}
 
+{% if article.parsed %}
+
 <p><strong>A witty setup TK.</strong> <a href="{{article.url}}" target="_blank">
 {{article.publication}}’s {{article.authors}} report{% if article.authors_singular %}s{% endif %}:</a>
 “{{article.summary}}”</p>
 
 <p><strong>Witty setup TK:</strong> “<a href="{{article.url}}" target="_blank">{{article.title}}</a>”
 [{{article.publication}}]
+
+{% else %}
+
+<p><strong style="color: #C83D2D">Couldn't parse:</strong> <a href="{{article.url}}" target="_blank">{{article.url}}</a></p>
+
+{% endif %}
 
 {% endfor %}
