@@ -1,0 +1,8 @@
+{% if message %}
+    <p><strong style="color: #C83D2D">{{message}}</strong></p>
+{% endif %}
+
+<form action="/clear" method="post">
+<p>Are you sure you want to clear all the current gleanings?</p>
+<input type="submit" value="Yes, clear em all!"></input>
+</form>

@@ -101,9 +101,6 @@ def build_glean():
     for url in url_list:
         gleanings.append(parse_article(url))
 
-    #todo: clear redis cache of urls
-    redis_db.delete('gleanings')
-
     return render_template('glean.html', gleanings=gleanings)
 
 @app.route('/add-url', methods=['POST'])
@@ -114,6 +111,15 @@ def add_url():
     if url:
         log_url(url)
     return ''
+
+@app.route('/clear', methods=['GET', 'POST'])
+def clear_gleanings():
+    message = None
+    if request.method == 'POST':
+        redis_db = redis.from_url(os.environ['REDIS_URL'])
+        redis_db.delete('gleanings')
+        message = 'Cleared the gleanings'
+    return render_template('clearform.html', message=message)
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
