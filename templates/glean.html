@@ -1,5 +1,12 @@
 {% for article in gleanings %}
 
+{% if article.type == "tweet" %}
+
+<p><strong>Meanwhile a tweeter tweeted TK:</strong></p>
+{{article.tweet|safe}}
+
+{% else %}
+
 {% if article.parsed %}
 
 <p><strong>A witty setup TK.</strong> <a href="{{article.url}}" target="_blank">
@@ -15,4 +22,12 @@
 
 {% endif %}
 
+{% endif %}
+
 {% endfor %}
+
+{% if has_tweets %}
+<code>
+  &lt;script async src="//platform.twitter.com/widgets.js" charset="utf-8"&gt;&lt;/script&gt;
+</code>
+{% endif %}

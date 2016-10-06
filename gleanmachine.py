@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from newspaper import Article
+import requests
 import json
 import redis
 import os
@@ -49,6 +50,19 @@ def log_url(url):
 
     return True
 
+def parse_tweet(url):
+    embed_url = 'https://publish.twitter.com/oembed?url=' + url
+    print(embed_url)
+    r = requests.get(embed_url)
+    tweet_data = r.json()
+    html = tweet_data['html'].split("\n")
+    tweet = html[0]
+    script = html[1]
+
+    return {"type": "tweet",
+            "tweet": tweet,
+            "script": script}
+
 def parse_article(url):
     article = Article(url)
 
@@ -94,6 +108,7 @@ def parse_article(url):
         summary = None
 
     return {
+                "type": "article",
                 "url": url,
                 "parsed": parsed,
                 "publication": publication,
@@ -113,9 +128,14 @@ def build_glean():
     gleanings = []
 
     for url in url_list:
-        gleanings.append(parse_article(url))
+        has_tweets = False
+        if 'twitter.com/' in url:
+            has_tweets = True
+            gleanings.append(parse_tweet(url))
+        else:
+            gleanings.append(parse_article(url))
 
-    return render_template('glean.html', gleanings=gleanings)
+    return render_template('glean.html', gleanings=gleanings, has_tweets=has_tweets)
 
 @app.route('/add-url', methods=['POST'])
 def add_url():
