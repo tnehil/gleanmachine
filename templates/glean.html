@@ -7,7 +7,7 @@
 “{{article.summary}}”</p>
 
 <p><strong>Witty setup TK:</strong> “<a href="{{article.url}}" target="_blank">{{article.title}}</a>”
-[{{article.publication}}]
+[{% if "The " in article.publication %}{{article.publication[4:]}}{% else %}{{article.publication}}{%endif%}]
 
 {% else %}
 
