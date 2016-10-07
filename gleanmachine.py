@@ -130,9 +130,9 @@ def build_glean():
     url_list = get_current_gleanings(redis_db)
 
     gleanings = []
+    has_tweets = False
 
     for url in url_list:
-        has_tweets = False
         if 'twitter.com/' in url:
             has_tweets = True
             gleanings.append(parse_tweet(url))
