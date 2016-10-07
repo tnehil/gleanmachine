@@ -153,7 +153,7 @@ def add_url():
         message = {"text": "Story added. {} gleanings on the list so far.".format(result[1])}
     else:
         message = {"text": "Looks like we already have that story."}
-    return jsonify(**message)
+    return ""
 
 @app.route('/clear', methods=['GET', 'POST'])
 def clear_gleanings():
