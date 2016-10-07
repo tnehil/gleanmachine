@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from newspaper import Article
 import requests
 import json
@@ -43,12 +43,16 @@ def log_url(url):
     redis_db = redis.from_url(os.environ['REDIS_URL'])
 
     current_gleanings = get_current_gleanings(redis_db)
+
+    updated = False
+
     if url not in current_gleanings:
         current_gleanings.append(url)
         update_gleanings(current_gleanings, redis_db)
         print("Added " + url)
+        updated = True
 
-    return True
+    return [updated, len(current_gleanings)]
 
 def parse_tweet(url):
     embed_url = 'https://publish.twitter.com/oembed?url=' + url
@@ -142,9 +146,14 @@ def add_url():
     #todo: store the urls in redis
     message = request.form['text']
     url = get_url_from_message(message)
+    result = False
     if url:
-        log_url(url)
-    return ''
+        result = log_url(url)
+    if result:
+        message = {"text": "Story added. {} gleanings on the list so far.".format(result[1])}
+    else:
+        message = {"text": "Looks like we already have that story."}
+    return jsonify(**message)
 
 @app.route('/clear', methods=['GET', 'POST'])
 def clear_gleanings():
