@@ -147,13 +147,17 @@ def add_url():
     message = request.form['text']
     url = get_url_from_message(message)
     result = False
+    response = False
     if url:
         result = log_url(url)
-    if result:
-        message = {"text": "Story added. {} gleanings on the list so far.".format(result[1])}
+        if result:
+            response = {"text": "Story added. {} gleanings on the list so far.".format(result[1])}
+        else:
+            response = {"text": "Looks like we already have that story."}
+    if response:
+        return jsonify(**response)
     else:
-        message = {"text": "Looks like we already have that story."}
-    return ""
+        return ''
 
 @app.route('/clear', methods=['GET', 'POST'])
 def clear_gleanings():
