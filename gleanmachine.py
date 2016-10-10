@@ -65,7 +65,7 @@ def parse_tweet(url):
         tweet = html[0]
         script = html[1]
     except:
-        html = "Couldn't embed the tweet: {}".format(url)
+        tweet = "Couldn't embed the tweet: {}".format(url)
         script = ""
 
     return {"type": "tweet",
