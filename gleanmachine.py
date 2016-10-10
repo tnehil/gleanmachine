@@ -57,11 +57,16 @@ def log_url(url):
 def parse_tweet(url):
     embed_url = 'https://publish.twitter.com/oembed?url=' + url
     print(embed_url)
-    r = requests.get(embed_url)
-    tweet_data = r.json()
-    html = tweet_data['html'].split("\n")
-    tweet = html[0]
-    script = html[1]
+
+    try:
+        r = requests.get(embed_url)
+        tweet_data = r.json()
+        html = tweet_data['html'].split("\n")
+        tweet = html[0]
+        script = html[1]
+    except:
+        html = "Couldn't embed the tweet: {}".format(url)
+        script = ""
 
     return {"type": "tweet",
             "tweet": tweet,
