@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect
 from newspaper import Article
 import requests
 import json
@@ -173,6 +173,7 @@ def edit_gleanings():
         if int(delete) < len(current_gleanings):
             del current_gleanings[int(delete)]
             update_gleanings(current_gleanings, redis_db)
+            return redirect("/edit")
     current_gleanings = get_current_gleanings(redis_db)
     urls = []
     for i in range(0,len(current_gleanings)):
