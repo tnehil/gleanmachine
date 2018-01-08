@@ -164,6 +164,22 @@ def add_url():
     else:
         return ''
 
+@app.route('/edit', methods=['GET'])
+def edit_gleanings():
+    redis_db = redis.from_url(os.environ['REDIS_URL'])
+    delete = request.args.get('delete')
+    if delete:
+        current_gleanings = get_current_gleanings(redis_db)
+        if int(delete) < len(current_gleanings):
+            del current_gleanings[int(delete)]
+            update_gleanings(current_gleanings, redis_db)
+    current_gleanings = get_current_gleanings(redis_db)
+    urls = []
+    for i in range(0,len(current_gleanings)):
+        urls.append([current_gleanings[i], i])
+    return render_template('edit.html', urls=urls)
+
+
 @app.route('/clear', methods=['GET', 'POST'])
 def clear_gleanings():
     message = None

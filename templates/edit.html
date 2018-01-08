@@ -1,0 +1,5 @@
+<ul>
+{% for url in urls %}
+<li><a href="{{url[0]}}" target="_blank">{{url[0]}}</a> [<a href="/edit?delete={{url[1]}}">DELETE</a>]</li>
+{% endfor %}
+</ul>
