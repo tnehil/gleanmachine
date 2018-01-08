@@ -155,7 +155,7 @@ def add_url():
     response = False
     if url:
         result = log_url(url)
-        if result:
+        if result[0]:
             response = {"text": "Story added. {} gleanings on the list so far.".format(result[1])}
         else:
             response = {"text": "Looks like we already have that story."}
