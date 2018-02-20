@@ -1,5 +1,37 @@
-<ul>
+<ul id="gleaningslist">
 {% for url in urls %}
-<li><a href="{{url[0]}}" target="_blank">{{url[0]}}</a> [<a href="/edit?delete={{url[1]}}">DELETE</a>]</li>
+  <li><a href="{{url[0]}}" target="_blank">{{url[0]}}</a> <span class="deletelink">[<a href="/edit?delete={{url[1]}}">DELETE</a>]</span></li>
 {% endfor %}
 </ul>
+<div id="save-order-form">
+  <form action="/edit" onSubmit="updateOrder()" method="POST">
+    <input type="hidden" id="order" name="order" value=""></input>
+    <input type="submit" value="Save this order"></input>
+  </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script>
+$( function() {
+  $( "#save-order-form").hide();
+  $( "#gleaningslist" ).sortable({
+    activate: function(){
+      $(".deletelink").hide();
+      $("#save-order-form").show();
+    }
+  });
+});
+
+function updateOrder() {
+  var newOrder = []
+  $("li a").each(function(){
+    if ($(this).text() != "DELETE") {
+      newOrder.push($(this).text())
+    }
+  });
+  $( "#order" ).val(newOrder);
+}
+
+</script>

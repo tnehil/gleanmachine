@@ -164,9 +164,16 @@ def add_url():
     else:
         return ''
 
-@app.route('/edit', methods=['GET'])
+@app.route('/edit', methods=['GET', 'POST'])
 def edit_gleanings():
     redis_db = redis.from_url(os.environ['REDIS_URL'])
+
+    if request.method == 'POST':
+        order = request.form['order']
+        order = order.split(",")
+        update_gleanings(order, redis_db)
+        return redirect("edit")
+
     delete = request.args.get('delete')
     if delete:
         current_gleanings = get_current_gleanings(redis_db)
