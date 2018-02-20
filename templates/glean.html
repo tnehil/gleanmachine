@@ -9,12 +9,14 @@
 
 {% if article.parsed %}
 
+{% if article.topstory %}
 <p><strong>A witty setup TK.</strong> <a href="{{article.url}}" target="_blank">
 {{article.publication}}’s {{article.authors}} report{% if article.authors_singular %}s{% endif %}:</a>
 “{{article.summary}}”</p>
-
+{% else %}
 <p><strong>Witty setup TK:</strong> “<a href="{{article.url}}" target="_blank">{{article.title}}</a>”
 [{% if "The " in article.publication %}{{article.publication[4:]}}{% else %}{{article.publication}}{%endif%}]
+{% endif %}
 
 {% else %}
 

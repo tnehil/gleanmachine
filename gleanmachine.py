@@ -144,6 +144,13 @@ def build_glean():
         else:
             gleanings.append(parse_article(url))
 
+    #Add top story designation to first four stories. In template,
+    #this pulls the longer teaser instead of just the headline.
+    rank = 0
+    while rank < 4:
+        gleanings[rank]["topstory"] = True
+        rank += 1
+
     return render_template('glean.html', gleanings=gleanings, has_tweets=has_tweets)
 
 @app.route('/add-url', methods=['POST'])
