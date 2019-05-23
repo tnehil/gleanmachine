@@ -56,7 +56,6 @@ def log_url(url):
 
 def parse_tweet(url):
     embed_url = 'https://publish.twitter.com/oembed?url=' + url
-    print(embed_url)
 
     try:
         r = requests.get(embed_url)
