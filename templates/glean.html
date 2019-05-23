@@ -1,28 +1,36 @@
 {% for article in gleanings %}
 
+{% if article.type == "separator" %}
+
+<h4>In other news…</h4>
+
+{% endif %}
+
 {% if article.type == "tweet" %}
 
 <p><strong>Meanwhile a tweeter tweeted TK:</strong></p>
 {{article.tweet|safe}}
 
-{% else %}
-
-{% if article.parsed %}
-
-{% if article.topstory %}
-<p><strong>A witty setup TK.</strong> <a href="{{article.url}}" target="_blank">
-{{article.publication}}’s {{article.authors}} report{% if article.authors_singular %}s{% endif %}:</a>
-“{{article.summary}}”</p>
-{% else %}
-<p><strong>Witty setup TK:</strong> “<a href="{{article.url}}" target="_blank">{{article.title}}</a>”
-[{% if "The " in article.publication %}{{article.publication[4:]}}{% else %}{{article.publication}}{%endif%}]
 {% endif %}
 
-{% else %}
+{% if article.type == "article" %}
 
-<p><strong style="color: #C83D2D">Couldn't parse:</strong> <a href="{{article.url}}" target="_blank">{{article.url}}</a></p>
+  {% if article.parsed %}
 
-{% endif %}
+    {% if article.topstory %}
+    <p><strong>A witty setup TK.</strong> <a href="{{article.url}}" target="_blank">
+    {{article.publication}}’s {{article.authors}} report{% if article.authors_singular %}s{% endif %}:</a>
+    “{{article.summary}}”</p>
+    {% else %}
+    <p><strong>Witty setup TK:</strong> “<a href="{{article.url}}" target="_blank">{{article.title}}</a>”
+    [{% if "The " in article.publication %}{{article.publication[4:]}}{% else %}{{article.publication}}{%endif%}]
+    {% endif %}
+
+  {% else %}
+
+    <p><strong style="color: #C83D2D">Couldn't parse:</strong> <a href="{{article.url}}" target="_blank">{{article.url}}</a></p>
+
+  {% endif %}
 
 {% endif %}
 

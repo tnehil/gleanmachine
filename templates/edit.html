@@ -1,6 +1,10 @@
 <ul id="gleaningslist">
 {% for url in urls %}
+  {% if url[0] == 'separator' %}
+  <li style="list-style-type:none;"><strong>In other news…</strong></li>
+  {% else %}
   <li><a href="{{url[0]}}" target="_blank">{{url[0]}}</a> <span class="deletelink">[<a href="/edit?delete={{url[1]}}">DELETE</a>]</span></li>
+  {% endif %}
 {% endfor %}
 </ul>
 <div id="save-order-form">
@@ -26,9 +30,11 @@ $( function() {
 
 function updateOrder() {
   var newOrder = []
-  $("li a").each(function(){
-    if ($(this).text() != "DELETE") {
-      newOrder.push($(this).text())
+  $("li").each(function(){
+    if ($(this).text() == 'In other news…') {
+      newOrder.push('separator')
+    } else {
+      newOrder.push($(this).find('a:first').text());
     }
   });
   $( "#order" ).val(newOrder);

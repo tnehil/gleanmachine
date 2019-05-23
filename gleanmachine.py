@@ -52,7 +52,7 @@ def log_url(url):
         print("Added " + url)
         updated = True
 
-    return [updated, len(current_gleanings)]
+    return [updated, len(current_gleanings)-1]
 
 def parse_tweet(url):
     embed_url = 'https://publish.twitter.com/oembed?url=' + url
@@ -137,7 +137,9 @@ def build_glean():
     has_tweets = False
 
     for url in url_list:
-        if 'twitter.com/' in url:
+        if url == "separator":
+            gleanings.append({"type": "separator"})
+        elif 'twitter.com/' in url:
             has_tweets = True
             gleanings.append(parse_tweet(url))
         else:
@@ -146,7 +148,7 @@ def build_glean():
     #Add top story designation to first four stories. In template,
     #this pulls the longer teaser instead of just the headline.
     rank = 0
-    while rank < 4:
+    while rank < url_list.index('separator'):
         gleanings[rank]["topstory"] = True
         rank += 1
 
@@ -200,6 +202,7 @@ def clear_gleanings():
     if request.method == 'POST':
         redis_db = redis.from_url(os.environ['REDIS_URL'])
         redis_db.delete('gleanings')
+        redis_db.set('gleanings', json.dumps(['separator']))
         message = 'Cleared the gleanings'
     return render_template('clearform.html', message=message)
 
